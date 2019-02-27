@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vicyor.mapper.DevUserMapper">
+    <select id="login" resultType="com.vicyor.pojo.DevUser">
+      select * from dev_user where devCode=#{devCode} and devPassword=#{devPassword}
+  </select>
+    <update id="pushImage">
+    update  dev_user set picdata =#{picData} where id=#{id}
+  </update>
+    <select id="queryAllUser" resultType="com.vicyor.dto.DevUserDto">
+    select  t1.id,t1.devCode,t1.devName,t1.devEmail,t2.devName modifyBy,t1.modifyDate from dev_user t1,dev_user t2
+    where t1.modifyBy=t2.id;
+  </select>
+  <update id="updateUser">
+      update dev_user
+      <trim prefix="set" prefixOverrides=",">
+        <if test="devCode != null and devCode !=''">
+          ,devCode=#{devCode}
+        </if>
+        <if test="devName != null and devName !=''">
+          ,devName=#{devName}
+        </if>
+        <if test="devEmail != null and devEmail !=''">
+          ,devEmail=#{devEmail}
+        </if>
+        <if test="xid != null">
+          ,modifyBy=#{xid}
+        </if>
+        <if test="modifyDate !=null">
+          ,modifyDate=#{modifyDate}
+        </if>
+      </trim>
+      where id=${id}
+  </update>
+  <delete id="deleteUserById">
+    delete from dev_user where id =#{id}
+  </delete>
+</mapper>
